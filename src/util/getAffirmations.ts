@@ -1,33 +1,40 @@
-import { iAmAffirmations, stoicAffirmations, loveAndRelationshipsAffirmations, zenAffirmations, happinessAffirmations } from "../affirmations"
-
+import { iAmAffirmations,stoicAffirmations, loveAndRelationshipsAffirmations, zenAffirmations, happinessAffirmations } from "../affirmations"
 
 type AffirmationType = 'i-am' | 'stoic' | 'love-and-relationships' | 'zen' | 'happiness'
 
-let lastTenIndices: number[] = [];
+let affirmationHistory: number[] = []
 
-export const getAffirmations = (affirmation: AffirmationType | string) => {
+const generateRandomAffirmation = (affirmationArray: string[]): number => {
     let randomIndex;
     do {
-        randomIndex = Math.floor(Math.random() * affirmation.length);
-    } while (lastTenIndices.includes(randomIndex));
+        randomIndex = Math.floor(Math.random() * affirmationArray.length);
+    } while (affirmationHistory.includes(randomIndex));
 
-    if (lastTenIndices.length >= 2) {
-        lastTenIndices.shift(); 
+    affirmationHistory.push(randomIndex);
+    if (affirmationHistory.length > 3) {
+        affirmationHistory.shift();
     }
-    lastTenIndices.push(randomIndex); 
 
-    switch(affirmation) {
-        case 'i-am': 
-            return iAmAffirmations[randomIndex]
-        case 'stoic':
-            return stoicAffirmations[randomIndex]
-        case 'love-and-relationships':
-            return loveAndRelationshipsAffirmations[randomIndex]
-        case 'zen':
-            return zenAffirmations[randomIndex]
-        case 'happiness':
-            return happinessAffirmations[randomIndex]
-        default:
-            return 'Invalid affirmation type'
+    return randomIndex;
+}
+
+export const getAffirmations = (affirmation: AffirmationType | string): string => {
+
+    const affirmations: { [key: string]: string[] } = {
+        'i-am': iAmAffirmations,
+        'stoic': stoicAffirmations,
+        'love-and-relationships': loveAndRelationshipsAffirmations,
+        'zen': zenAffirmations,
+        'happiness': happinessAffirmations
+    };
+
+    const affirmationArray = affirmations[affirmation as AffirmationType];
+
+    if (!affirmationArray) {
+        return 'Invalid affirmation type';
     }
+
+    const randomIndex = generateRandomAffirmation(affirmationArray);
+
+    return affirmationArray[randomIndex];
 }
