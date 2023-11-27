@@ -1,5 +1,5 @@
 # Ignore node_modules directory
-affirmations-api/node_modules/
+node_modules/
 
 # Ignore build artifacts
 build/
@@ -22,6 +22,8 @@ build/
 
 # Ignore package-lock.json for npm
 package-lock.json
+
+bun.lockb
 
 # Ignore yarn.lock for Yarn
 yarn.lock
